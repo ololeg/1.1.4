@@ -9,13 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
+    Session session = Util.getSessionFactory().openSession();
 
     public UserDaoHibernateImpl() {}
 
-
     @Override
     public void createUsersTable() {
-        Session session = Util.getSessionFactory().openSession();
         Transaction tr = session.beginTransaction();
         session.createSQLQuery("CREATE  TABLE  IF NOT  EXISTS  users " +
                 "(id BIGINT NOT NULL AUTO_INCREMENT, " +
@@ -28,7 +27,6 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        Session session = Util.getSessionFactory().openSession();
         Transaction tr = session.beginTransaction();
         session.createSQLQuery("DROP TABLE IF EXISTS users");
         tr.commit();
@@ -36,7 +34,6 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session = Util.getSessionFactory().openSession();
         Transaction tr = session.beginTransaction();
         session.save(new User(name, lastName, age));
         tr.commit();
@@ -44,7 +41,6 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-        Session session = Util.getSessionFactory().openSession();
         Transaction tr = session.beginTransaction();
         session.createSQLQuery("DELETE FROM users WHERE id").executeUpdate();
         tr.commit();
@@ -53,7 +49,6 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         List list = new ArrayList<>();
-        Session session = Util.getSessionFactory().openSession();
         Transaction tr = session.beginTransaction();
         list = session.createCriteria(User.class).list();
         tr.commit();
@@ -62,7 +57,6 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void cleanUsersTable() {
-        Session session = Util.getSessionFactory().openSession();
         Transaction tr = session.beginTransaction();
         session.createSQLQuery("truncate table users").executeUpdate();
         tr.commit();
